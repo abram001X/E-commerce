@@ -1,0 +1,42 @@
+{
+  "name": "e-commerce-server",
+  "version": "1.0.0",
+  "description": "server e-commerce service",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abram001X/E-commerce-fake.git"
+  },
+  "keywords": [
+    "e-commerce",
+    "node",
+    "express",
+    "bd",
+    "js"
+  ],
+  "author": "Abraham Alfonzo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abram001X/E-commerce-fake/issues"
+  },
+  "homepage": "https://github.com/abram001X/E-commerce-fake#readme",
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "standard": "^17.1.2"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
