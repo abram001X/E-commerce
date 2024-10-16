@@ -3,7 +3,7 @@ import { config } from 'dotenv'
 import crypto from 'crypto'
 
 import bcrypt from 'bcrypt'
-// import { SALT_ROUNDS } from '../config.js'
+import { SALT_ROUNDS } from '../config.js'
 
 config()
 const db = createClient({
@@ -11,44 +11,63 @@ const db = createClient({
   authToken: process.env.DB_TOKEN
 })
 
-export async function createUser ({ username, email, password }) {
-  let userData
-  const hashedPassword = bcrypt.hashSync(password, 10)
-  const id = crypto.randomUUID()
-  try {
-    userData = await db.execute({
-      sql: 'INSERT INTO users(id,username,email,password) VALUES (:id,:username,:email,:hashedPassword);',
-      args: { id, username, email, hashedPassword }
-    })
-  } catch (e) {
-    console.error(e.message)
-    return e.message
-  }
-  return { userData }
-}
+export class DbUsers {
+  constructor ({ username, email, password }) {
+    let userData
+    this.username = username
+    this.email = email
+    this.password = password
+    function validation () {
+      if (typeof username !== 'string') {
+        return 'username is incorrect'
+      }
+      if (username.length <= 3) {
+        return 'username has has to be greater than 3'
+      }
+      if (typeof password !== 'string') {
+        return 'password must be a string'
+      }
+    }
+    this.createUser = async function () {
+      const hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS)
+      const id = crypto.randomUUID()
+      const error = validation()
+      if (error) return error
+      try {
+        userData = await db.execute({
+          sql: 'INSERT INTO users(id,username,email,password) VALUES (:id,:username,:email,:hashedPassword)',
+          args: { id, username, email, hashedPassword }
+        })
+      } catch (e) {
+        console.error(e.message)
+        return e.message
+      }
+      return { userData }
+    }
 
-export async function loginUser ({ username, password }) {
-  let userData
-  if (typeof username !== 'string') {
-    return { message: 'email must be a string' }
+    this.login = async function () {
+      const error = validation()
+      if (error) return error
+      try {
+        userData = await db.execute({
+          sql: 'SELECT id, username, email, password FROM users WHERE username = :username',
+          args: { username }
+        })
+      } catch (e) {
+        return e.message
+      }
+      const responseDb = userData.rows[0]
+      if (responseDb) {
+        const isValid = bcrypt.compareSync(password, responseDb.password)
+        if (!isValid) return 'password invallid'
+        const { id, username, email } = responseDb
+        return {
+          id,
+          username,
+          email
+        }
+      }
+      return 'user does no exist'
+    }
   }
-  if (typeof password !== 'string') {
-    return { message: 'password must be a string' }
-  }
-  try {
-    userData = await db.execute({
-      sql: 'SELECT id, username, email, password FROM users WHERE username = :username',
-      args: { username }
-    })
-  } catch (e) {
-    return e.message
-  }
-  const responseDb = userData.rows[0]
-  console.log(userData)
-  if (responseDb) {
-    const isValid = bcrypt.compareSync(password, responseDb.password)
-    if (!isValid) return { message: 'password invallid' }
-    return responseDb
-  }
-  return { message: 'username or password no exists' }
 }
