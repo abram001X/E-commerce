@@ -19,13 +19,13 @@ export class DbUsers {
     this.password = password
     function validation () {
       if (typeof username !== 'string') {
-        return 'username is incorrect'
+        return 'Username is incorrect'
       }
       if (username.length <= 3) {
-        return 'username has has to be greater than 3'
+        return 'Username has has to be greater than 3'
       }
       if (typeof password !== 'string') {
-        return 'password must be a string'
+        return 'Password must be a string'
       }
     }
     this.createUser = async function () {
@@ -42,7 +42,7 @@ export class DbUsers {
         console.error(e.message)
         return e.message
       }
-      return { userData }
+      return 'Register succesfull!!'
     }
 
     this.login = async function () {
@@ -59,7 +59,7 @@ export class DbUsers {
       const responseDb = userData.rows[0]
       if (responseDb) {
         const isValid = bcrypt.compareSync(password, responseDb.password)
-        if (!isValid) return 'password invallid'
+        if (!isValid) return 'Password invallid'
         const { id, username, email } = responseDb
         return {
           id,
@@ -67,7 +67,7 @@ export class DbUsers {
           email
         }
       }
-      return 'user does no exist'
+      return 'User does no exist'
     }
   }
 }

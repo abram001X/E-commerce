@@ -20,7 +20,8 @@ app.post('/sign-in', async (req, res) => {
   const data = req.body
   try {
     const dbData = new DbUsers(data)
-    res.send(await dbData.createUser())
+    const user = await dbData.createUser()
+    res.send({ response: user })
   } catch (e) {
     res.status(400).send(e.message)
   }
@@ -47,7 +48,7 @@ app.post('/login', async (req, res) => {
         sameSite: 'strict', // la cookie solo se  puede  acceder en el mismo dominio
         maxAge: 1000 * 60 * 60 // la cookie tiene un  tiempo de validez de 1h
       })
-      .send({ user, token })
+      .send({ response: user, token })
   } catch (e) {
     console.log(e)
     res.status(401).send(e.message)
