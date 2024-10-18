@@ -41,20 +41,17 @@ app.post('/login', async (req, res) => {
       }
     )
     res
-      .cookie('acces_token', token, {
+      .cookie('access_token', token, {
         httpOnly: true, // la cookie solo se puede leer en el servidor
         secure: process.env.NODE_ENV === 'production', // la cookie solo se puede acceder en https
-        sameSite: 'strict', // la cookie solo sepude  acceder en el mismo dominio
+        sameSite: 'strict', // la cookie solo se  puede  acceder en el mismo dominio
         maxAge: 1000 * 60 * 60 // la cookie tiene un  tiempo de validez de 1h
       })
-      .send(user)
+      .send({ user, token })
   } catch (e) {
+    console.log(e)
     res.status(401).send(e.message)
   }
-})
-
-app.get('/protected', (req, res) => {
-  res.render('protected', { username: 'abraham' })
 })
 
 console.log('http://localhost:3000/add/account')
