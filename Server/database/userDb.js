@@ -11,13 +11,10 @@ const db = createClient({
   authToken: process.env.DB_TOKEN
 })
 
-export class DbUsers {
-  constructor ({ username, email, password }) {
+class DbUsers {
+  constructor () {
     let userData
-    this.username = username
-    this.email = email
-    this.password = password
-    function validation () {
+    function validation (username, password) {
       if (typeof username !== 'string') {
         return 'Username is incorrect'
       }
@@ -28,11 +25,11 @@ export class DbUsers {
         return 'Password must be a string'
       }
     }
-    this.createUser = async function () {
+    this.createUser = async function ({ username, email, password }) {
       const hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS)
       const id = crypto.randomUUID()
-      const error = validation()
-      if (error) return error
+      const userValid = validation(username, password)
+      if (userValid) return userValid
       try {
         userData = await db.execute({
           sql: 'INSERT INTO users(id,username,email,password) VALUES (:id,:username,:email,:hashedPassword)',
@@ -45,9 +42,9 @@ export class DbUsers {
       return 'Register succesfull!!'
     }
 
-    this.login = async function () {
-      const error = validation()
-      if (error) return error
+    this.login = async function ({ username, password }) {
+      const userValid = validation(username, password)
+      if (userValid) return userValid
       try {
         userData = await db.execute({
           sql: 'SELECT id, username, email, password FROM users WHERE username = :username',
@@ -69,5 +66,21 @@ export class DbUsers {
       }
       return 'User does no exist'
     }
+    this.findByid = async function (id) {
+      try {
+        userData = await db.execute({
+          sql: 'SELECT id, username, email FROM users WHERE id = :id',
+          args: { id }
+        })
+      } catch (e) {
+        return e.message
+      }
+      const responseDb = userData.rows[0]
+      console.log(responseDb)
+      if (responseDb) {
+        return responseDb
+      } else return 'User does no exist'
+    }
   }
 }
+export const User = new DbUsers()
