@@ -6,7 +6,7 @@ export const register = async (req, res) => {
   try {
     const dbData = User
     const user = await dbData.createUser(data)
-    res.json({ response: user })
+    res.json(user)
   } catch (e) {
     res.status(400).send(e.message)
   }
@@ -17,14 +17,13 @@ export const login = async (req, res) => {
   try {
     const dbData = User
     const user = await dbData.login(data) // res.send(await dbData.login())
-    if (typeof user !== 'object') {
-      return res.send({ response: user })
+    if (!user.id) {
+      return res.status(401).send(user)
     }
     const token = jwt.sign(
       {
         id: user.id,
-        username: user.username,
-        email: user.email
+        username: user.username
       },
       SECRET_JWT_KEY,
       {
@@ -33,12 +32,15 @@ export const login = async (req, res) => {
     )
     res
       .cookie('accessToken', token, {
-        httpOnly: true, // la cookie solo se puede leer en el servidor
-        secure: process.env.NODE_ENV === 'production', // la cookie solo se puede acceder en https
-        sameSite: 'strict', // la cookie solo se  puede  acceder en el mismo dominio
-        maxAge: 1000 * 60 * 60 // la cookie tiene un  tiempo de validez de 1h
+        secure: true,
+        sameSite: 'none',
+        httpOnly: false
       })
-      .json({ response: user, token })
+      .json({
+        user,
+        message: 'Login succesfull!!',
+        token
+      })
   } catch (e) {
     console.log(e)
     res.status(401).json(e.message)
@@ -51,7 +53,21 @@ export const logout = (req, res) => {
   })
   return res.sendStatus(200)
 }
+
 export const profile = async (req, res) => {
+  const { id } = req.user
+  const userFound = await User.findByid(id)
+  if (!userFound) {
+    return res.status(401).json({ message: 'User not found' })
+  }
+  return res.json({
+    id: userFound.id,
+    username: userFound.username,
+    email: userFound.email
+  })
+}
+
+export const verifyToken = async (req, res) => {
   const { id } = req.user
   const userFound = await User.findByid(id)
   if (!userFound) {

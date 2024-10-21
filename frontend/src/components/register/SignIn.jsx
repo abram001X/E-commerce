@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { postUser } from '../../../lib/postUser';
-const URL =
-  import.meta.env.VITE_BACKEND_URL_ADD_ACCOUNT ||
-  'http://localhost:3000/sign-in';
+import { registerRequest } from '../../lib/api';
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,8 +8,8 @@ export default function SignIn() {
   const [username, setUsername] = useState('');
   const [error, setError] = useState(false);
   const [msg, setMsg] = useState('');
-  const navigate = useNavigate()
-  const registerUser = (e) => {
+  const navigate = useNavigate();
+  const registerUser = async (e) => {
     e.preventDefault();
     if (password === confirm && email.includes('@')) {
       const data = {
@@ -20,13 +17,11 @@ export default function SignIn() {
         email,
         password
       };
-      postUser(URL, data).then((res) => {
-        setMsg(res.response);
-        if(res.response == 'Register succesfull!!'){
-          navigate('/login')
-        }
-      });
-
+      const res = await registerRequest(data);
+      setMsg(res.message);
+      if (res.message == 'Register succesfull!!') {
+        navigate('/login');
+      }
     } else {
       setError(true);
     }

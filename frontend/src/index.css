@@ -20,6 +20,9 @@ section{
 .cont_img:hover .img_svg{
   display: block;
 }
+.profile{
+  color: #fff;
+}
 @keyframes load {
   0%{
     left: -80%;

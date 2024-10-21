@@ -1,31 +1,23 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { postUser } from '../../../lib/postUser';
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../provider/authProvider'; 
 
-const URL =
-  import.meta.env.VITE_BACKEND_URL_LOGIN_ACCOUNT ||
-  'http://localhost:3000/login';
 export default function Login() {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
   const [msg, setMsg] = useState('');
-  const loginUser = (e) => {
+  const { signin } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const loginUser = async (e) => {
     e.preventDefault();
-    if (email.includes('@')) {
-      const data = {
-        username,
-        email,
-        password
-      };
-      postUser(URL, data).then((user) => {
-        console.log(user);
-        setMsg(typeof user.response == 'string' ? user.response : 'Login succesfull!!');
-      });
-      
-    } else {
-      setError(true);
+    const data = {
+      username,
+      password
+    };
+    const res = await signin(data);
+    setMsg(res.message);
+    if (res.message == 'Login succesfull!!') {
+      navigate('/profile');
     }
   };
   return (
@@ -38,34 +30,23 @@ export default function Login() {
       <p>Enter your username, password & email </p>
       <div className="flex flex-col">
         <input
-          onClick={() => setError(false)}
           type="text"
           placeholder="Username"
           className="p-2 w-96 text-black border-b border-b-blue-700 outline-none focus:bg-gray-200"
           onChange={(e) => {
             setUsername(e.target.value);
-          }}
-        />
-      </div>
-      <div className="flex flex-col">
-        <input
-          onClick={() => setError(false)}
-          type="email"
-          placeholder="Email"
-          className="p-2 w-96 text-black border-b border-b-blue-700 outline-none focus:bg-gray-200"
-          onChange={(e) => {
-            setEmail(e.target.value);
+            setMsg('');
           }}
         />
       </div>
       <div className="flex flex-col  pb-3">
         <input
-          onClick={() => setError(false)}
           type="password"
           placeholder="Password"
           className="p-2 border-b border-b-blue-700  outline-none focus:bg-gray-200"
           onChange={(e) => {
             setPassword(e.target.value);
+            setMsg('');
           }}
         />
 
@@ -76,9 +57,6 @@ export default function Login() {
           <p className="text-red-700">{msg}</p>
         ) : (
           <p className="text-green-700">{msg}</p>
-        )}
-        {error && (
-          <p className="text-red-700">Password or email is incorrect</p>
         )}
       </div>
       <div className="flex w-full justify-between">

@@ -16,13 +16,13 @@ class DbUsers {
     let userData
     function validation (username, password) {
       if (typeof username !== 'string') {
-        return 'Username is incorrect'
+        return { message: 'Username is incorrect' }
       }
       if (username.length <= 3) {
-        return 'Username has has to be greater than 3'
+        return { message: 'Username has has to be greater than 3' }
       }
       if (typeof password !== 'string') {
-        return 'Password must be a string'
+        return { message: 'Password must be a string' }
       }
     }
     this.createUser = async function ({ username, email, password }) {
@@ -31,15 +31,19 @@ class DbUsers {
       const userValid = validation(username, password)
       if (userValid) return userValid
       try {
-        userData = await db.execute({
-          sql: 'INSERT INTO users(id,username,email,password) VALUES (:id,:username,:email,:hashedPassword)',
-          args: { id, username, email, hashedPassword }
-        })
+        if (email && email.includes('@')) {
+          userData = await db.execute({
+            sql: 'INSERT INTO users(id,username,email,password) VALUES (:id,:username,:email,:hashedPassword)',
+            args: { id, username, email, hashedPassword }
+          })
+        } else return { message: 'email is not correct' }
       } catch (e) {
         console.error(e.message)
-        return e.message
+        if (e.message === 'SQLITE_CONSTRAINT: SQLite error: UNIQUE constraint failed: users.username') {
+          return { message: 'Username already exists' }
+        }
       }
-      return 'Register succesfull!!'
+      return { message: 'Register succesfull!!' }
     }
 
     this.login = async function ({ username, password }) {
@@ -47,24 +51,23 @@ class DbUsers {
       if (userValid) return userValid
       try {
         userData = await db.execute({
-          sql: 'SELECT id, username, email, password FROM users WHERE username = :username',
+          sql: 'SELECT id, username, password FROM users WHERE username = :username',
           args: { username }
         })
       } catch (e) {
-        return e.message
+        return { message: 'User does no exist' }
       }
       const responseDb = userData.rows[0]
       if (responseDb) {
         const isValid = bcrypt.compareSync(password, responseDb.password)
-        if (!isValid) return 'Password invallid'
-        const { id, username, email } = responseDb
+        if (!isValid) return { message: 'Password invallid' }
+        const { id, username } = responseDb
         return {
           id,
-          username,
-          email
+          username
         }
       }
-      return 'User does no exist'
+      return { message: 'User does no exist' }
     }
     this.findByid = async function (id) {
       try {
@@ -73,13 +76,19 @@ class DbUsers {
           args: { id }
         })
       } catch (e) {
-        return e.message
+        return { message: e.message }
       }
       const responseDb = userData.rows[0]
       console.log(responseDb)
       if (responseDb) {
-        return responseDb
-      } else return 'User does no exist'
+        const { id, username, email } = responseDb
+        return {
+          id,
+          username,
+          email,
+          message: 'User found'
+        }
+      }
     }
   }
 }
