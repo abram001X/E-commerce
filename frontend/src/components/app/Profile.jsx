@@ -51,7 +51,7 @@ export default function Profile() {
               })}
             </ul>
           )}
-          <Link to={'/add-product'}>
+          <Link to={'/add-products'}>
             <div className="flex mt-4 items-center">
               <IconStorePlus fontSize="18px" />
               <h3 className="text-slate-300 text-sm ml-1">New product</h3>

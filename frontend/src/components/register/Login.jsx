@@ -1,12 +1,12 @@
 import { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../provider/authProvider'; 
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
-  const { signin } = useContext(AuthContext);
+  const { signin, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   const loginUser = async (e) => {
     e.preventDefault();
@@ -20,6 +20,7 @@ export default function Login() {
       navigate('/');
     }
   };
+  if(isAuthenticated) return <Navigate to={'/'}/>
   return (
     <form
       action="POST"

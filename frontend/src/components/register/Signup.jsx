@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { registerRequest } from '../../lib/api';
+import { AuthContext } from '../../provider/authProvider';
+
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -9,6 +11,7 @@ export default function SignUp() {
   const [error, setError] = useState(false);
   const [msg, setMsg] = useState('');
   const navigate = useNavigate();
+  const {isAuthenticated} = useContext(AuthContext)
   const registerUser = async (e) => {
     e.preventDefault();
     if (password === confirm && email.includes('@')) {
@@ -26,6 +29,7 @@ export default function SignUp() {
       setError(true);
     }
   };
+  if(isAuthenticated) return <Navigate to={'/'}/>
   return (
     <div className="text-black">
       <h1 className="text-black text-3xl mb-3 font-semibold">Create account</h1>

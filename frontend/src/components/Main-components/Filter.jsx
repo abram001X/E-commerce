@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
-import { ProductsProvider } from '../../provider/ProductsProvider';
+import { ProductsContext } from '../../provider/ProductsProvider.jsx';
 
 export default function Filter() {
   const { setSearchValue, setPrice, price, max, setHighPrice } =
-    useContext(ProductsProvider);
+    useContext(ProductsContext);
   const [data, setData] = useState('');
   const [viewPrice, setViewPrice] = useState(false);
   const handleSearch = (e) => {

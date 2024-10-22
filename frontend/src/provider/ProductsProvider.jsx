@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { createContext,useState } from 'react';
 
-export const ProductsProvider = createContext('');
-export default function ProductsGlobal({children}){
+export const ProductsContext = createContext({});
+
+export default function ProductsProvider({children}){
   const [searchValue, setSearchValue] = useState('');
   const [price, setPrice] = useState(0);
   const [max, setMax] = useState(null);
@@ -18,8 +19,8 @@ export default function ProductsGlobal({children}){
     setHighPrice
   };
     return (
-        <ProductsProvider.Provider value={valueProvider}>
+        <ProductsContext.Provider value={valueProvider}>
             {children}
-        </ProductsProvider.Provider>
+        </ProductsContext.Provider>
     )
 }

@@ -35,8 +35,12 @@ export default function Product() {
               className="w-20 rounded-md hover:cursor-pointer  hover:opacity-70"
             />
           </div>
-          <div className=" flex w-2/6 h-full">
-            <img src={product.images[img]} alt="" className="object-cover rounded-xl" />
+          <div className="flex w-2/6 h-full">
+            <img
+              src={product.images[img]}
+              alt=""
+              className="object-cover rounded-xl"
+            />
           </div>
           <div className="text-white flex flex-col h-full ">
             <h2 className="text-3xl">{product.title}</h2>
@@ -60,7 +64,9 @@ export default function Product() {
               </h3>
               <p>{product.description}</p>
             </div>
-            <button className=' mt-6 w-32 p-1 items-center rounded-lg justify-around bg-blue-700 outline-none hover:opacity-65 active:bg-blue-600 flex'><IconCartPlus fontSize='20px'/> Add to cart</button>
+            <button className=" mt-6 w-32 p-1 items-center rounded-lg justify-around bg-blue-700 outline-none hover:opacity-65 active:bg-blue-600 flex">
+              <IconCartPlus fontSize="20px" /> Add to cart
+            </button>
           </div>
         </section>
       </article>
