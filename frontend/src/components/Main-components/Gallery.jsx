@@ -17,7 +17,7 @@ export default function Gallery({ product }) {
         <div className="pb-0 flex w-full justify-between items-center cont_img">
           <div
             onClick={() => handleImage(true)}
-            className="img_svg absolute z-50 bg-black rounded-3xl translate-x-3 p-1  opacity-45 hover:cursor-pointer hover:opacity-35"
+            className="img_svg absolute z-30 bg-black rounded-3xl translate-x-3 p-1  opacity-45 hover:cursor-pointer hover:opacity-35"
           >
             <IconChevronLeft color="white" />
           </div>
@@ -29,7 +29,7 @@ export default function Gallery({ product }) {
           </div>
           <div
             onClick={() => handleImage(false)}
-            className="img_svg absolute z-50 translate-x-56 p-1  bg-black rounded-3xl opacity-45 hover:cursor-pointer hover:opacity-35"
+            className="img_svg absolute z-30 translate-x-56 p-1  bg-black rounded-3xl opacity-45 hover:cursor-pointer hover:opacity-35"
           >
             <IconChevronRight color="white" />
           </div>

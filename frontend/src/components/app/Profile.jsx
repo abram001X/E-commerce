@@ -9,7 +9,7 @@ import {
 import { Link } from 'react-router-dom';
 
 export default function Profile() {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   return (
     <article className="text-white fixed z-40 h-screen right-10 rounded-md bg-black w-72 p-4 border border-slate-900">
       <section className="flex items-center">
@@ -59,7 +59,10 @@ export default function Profile() {
           </Link>
         </div>
       </section>
-      <button className="p-1  mt-7 text-black rounded-sm mr-3 bg-white hover:bg-slate-300 active:bg-blue-400">
+      <button
+        onClick={logout}
+        className="p-1  mt-7 text-black rounded-sm mr-3 bg-white hover:bg-slate-300 active:bg-blue-400"
+      >
         Logout
       </button>
     </article>

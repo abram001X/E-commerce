@@ -11,6 +11,11 @@ export default function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(false);
+  const logout = () => {
+    Cookies.remove('accessToken');
+    setUser(null);
+    setIsAuthenticated(false);
+  };
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
@@ -54,7 +59,15 @@ export default function AuthProvider({ children }) {
   }, []);
   return (
     <AuthContext.Provider
-      value={{ signin, user, isAuthenticated, isLoading, setProfile, profile }}
+      value={{
+        logout,
+        signin,
+        user,
+        isAuthenticated,
+        isLoading,
+        setProfile,
+        profile
+      }}
     >
       <Header />
       <div className="flex">

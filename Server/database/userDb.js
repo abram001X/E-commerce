@@ -61,10 +61,11 @@ class DbUsers {
       if (responseDb) {
         const isValid = bcrypt.compareSync(password, responseDb.password)
         if (!isValid) return { message: 'Password invallid' }
-        const { id, username } = responseDb
+        const { id, username, email } = responseDb
         return {
           id,
-          username
+          username,
+          email
         }
       }
       return { message: 'User does no exist' }
