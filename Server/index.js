@@ -17,7 +17,7 @@ app.use(
   })
 )
 
-app.post('/sign-in', register)
+app.post('/signup', register)
 
 app.post('/login', login)
 

@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { loginRequest, verifyTokenRequest } from '../lib/api';
 export const AuthContext = createContext(null);
+
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);

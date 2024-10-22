@@ -12,7 +12,7 @@ export const loginRequest = async (data) => {
 };
 export const registerRequest = async (data) => {
   return axios
-    .post('/sign-in', data)
+    .post('/signup', data)
     .then((res) => {
       return res.data;
     })

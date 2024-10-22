@@ -26,7 +26,7 @@ export default function Main({ id }) {
   const [products, setProducts] = useState([]);
   const [isLoad, setIsLoad] = useState(true);
   const { searchValue, setMax, price, max, highPrice } =
-    useContext(ProductsProvider);
+    useContext(ProductsProvider);  
   useEffect(() => {
     setIsLoad(true);
     fetchProducts(id, searchValue, parseInt(price)).then((items) => {
