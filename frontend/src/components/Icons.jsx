@@ -90,3 +90,47 @@ export function IconProfile(props) {
     </svg>
   );
 }
+export function Icon036Profile(props) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      height="1em"
+      width="1em"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M13.5 0h-12C.675 0 0 .675 0 1.5v13c0 .825.675 1.5 1.5 1.5h12c.825 0 1.5-.675 1.5-1.5v-13c0-.825-.675-1.5-1.5-1.5zM13 14H2V2h11v12zM4 9h7v1H4zm0 2h7v1H4zm1-6.5a1.5 1.5 0 113.001.001A1.5 1.5 0 015 4.5zM7.5 6h-2C4.675 6 4 6.45 4 7v1h5V7c0-.55-.675-1-1.5-1z"
+      />
+    </svg>
+  );
+}
+
+export function IconStoreEdit(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      height="1em"
+      width="1em"
+      {...props}
+    >
+      <path d="M20 6H4V4h16v2m-6 10.13l-3 3V20H4v-6H3v-2l1-5h16l.61 3.07c-.45.1-.88.33-1.22.67L16.13 14H14v2.13M12 14H6v4h6v-4m10.85-.53l-1.32-1.32c-.2-.2-.53-.2-.72 0l-.98.98 2.04 2.04.98-.98c.2-.19.2-.52 0-.72M13 19.96V22h2.04l6.13-6.12-2.04-2.05L13 19.96z" />
+    </svg>
+  );
+}
+
+export function IconStorePlus(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      height="1em"
+      width="1em"
+      {...props}
+    >
+      <path d="M4 4v2h16V4M4 7l-1 5v2h1v6h9c-.05-.34-.08-.69-.08-1.05 0-1.22.38-2.42 1.08-3.42V14h1.54c1-.67 2.17-1.04 3.37-1.04.71 0 1.42.13 2.09.38V12l-1-5M6 14h6v4H6m12-3v3h-3v2h3v3h2v-3h3v-2h-3v-3" />
+    </svg>
+  );
+}

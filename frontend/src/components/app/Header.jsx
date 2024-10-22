@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../provider/authProvider';
 
 export default function Header() {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, setProfile, profile } = useContext(AuthContext);
 
   return (
     <header className="bg-slate-900 bg-opacity-90 p-2 flex-1 sticky top-0 z-40 flex justify-between">
@@ -28,8 +28,13 @@ export default function Header() {
           </Link>
         </div>
       ) : (
-        <div>
-          <IconProfile/>
+        <div className="flex">
+          <button className="p-1 text-black rounded-sm mr-3 bg-white hover:bg-slate-300 active:bg-blue-400">
+            Logout
+          </button>
+          <div className="hover:cursor-pointer hover:opacity-70" onClick={()=>setProfile(profile ? false : true)}>
+              <IconProfile color="#fff" fontSize="32" />
+          </div>
         </div>
       )}
     </header>

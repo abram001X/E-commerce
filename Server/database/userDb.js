@@ -51,7 +51,7 @@ class DbUsers {
       if (userValid) return userValid
       try {
         userData = await db.execute({
-          sql: 'SELECT id, username, password FROM users WHERE username = :username',
+          sql: 'SELECT id, username, password, email FROM users WHERE username = :username',
           args: { username }
         })
       } catch (e) {

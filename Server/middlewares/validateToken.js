@@ -5,11 +5,11 @@ export function validateToken (req, res, next) {
   if (!accessToken) {
     return res.status(401).json({ message: 'No token, authorization denied' })
   }
-  jwt.verify(accessToken, SECRET_JWT_KEY, (err, user) => {
-    if (err) {
+  return jwt.verify(accessToken, SECRET_JWT_KEY, (error, user) => {
+    if (error) {
       return res.status(401).json({ message: 'Invalid Token' })
     }
     req.user = user
+    next()
   })
-  next()
 }

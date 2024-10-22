@@ -69,6 +69,9 @@ export const profile = async (req, res) => {
 
 export const verifyToken = async (req, res) => {
   const { id } = req.user
+  if (!id) {
+    return res.status(401).json({ message: 'No token, authorization denied' })
+  }
   const userFound = await User.findByid(id)
   if (!userFound) {
     return res.status(401).json({ message: 'User not found' })
