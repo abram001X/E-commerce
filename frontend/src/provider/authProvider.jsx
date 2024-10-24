@@ -28,35 +28,38 @@ export default function AuthProvider({ children }) {
       console.log(e.message);
     }
   };
-  useEffect(() => {
-    const checkLogin = async () => {
-      const cookies = Cookies.get();
-      if (!cookies.accessToken) {
-        console.log('bad');
+
+  const checkLogin = async () => {
+    const cookies = Cookies.get();
+    if (!cookies.accessToken) {
+      console.log('bad');
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+    try {
+      const res = await verifyTokenRequest();
+      if (!res.data) {
         setIsAuthenticated(false);
         setUser(null);
-        setIsLoading(false);
         return;
       }
-      try {
-        const res = await verifyTokenRequest();
-        if (!res.data) {
-          setIsAuthenticated(false);
-          setUser(null);
-          return;
-        }
-        setIsAuthenticated(true);
-        setUser(res.data);
-        setIsLoading(false);
-      } catch (e) {
-        console.log(e.message);
-        setIsLoading(false);
-        setIsAuthenticated(false);
-        setUser(null);
-      }
-    };
+      setIsAuthenticated(true);
+      setUser(res.data);
+      setIsLoading(false);
+    } catch (e) {
+      console.log(e.message);
+      setIsLoading(false);
+      setIsAuthenticated(false);
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
     checkLogin();
   }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -66,7 +69,8 @@ export default function AuthProvider({ children }) {
         isAuthenticated,
         isLoading,
         setProfile,
-        profile
+        profile,
+        checkLogin
       }}
     >
       <Header />

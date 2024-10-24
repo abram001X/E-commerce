@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../provider/authProvider';
 import {
   Icon036Profile,
@@ -7,9 +7,21 @@ import {
   IconStorePlus
 } from '../Icons';
 import { Link } from 'react-router-dom';
+import { findProducts } from '../../lib/api';
 
 export default function Profile() {
+  const [products, setProducts] = useState([]);
   const { user, logout } = useContext(AuthContext);
+  const myProducts = async () => {
+    const res = await findProducts();
+    if (res.data.message == 'error') {
+      return;
+    }
+    setProducts([res.data]);
+  };
+  useEffect(() => {
+    myProducts();
+  }, []);
   return (
     <article className="text-white fixed z-40 h-screen right-10 rounded-md bg-black w-72 p-4 border border-slate-900">
       <section className="flex items-center">
@@ -25,12 +37,19 @@ export default function Profile() {
           <h1 className="ml-2">Shopping cart</h1>
         </div>
         <div className="border-l pl-2 pt-4">
-          {!user.productscart ? (
+          {!user.cart ? (
             <h1 className="text-slate-600">No products in your cart</h1>
           ) : (
             <ul>
-              {user.productscart.map((product) => {
-                <li>{product.name}</li>;
+              {user.cart.map((product, j) => {
+                return (
+                  <li
+                    key={j}
+                    className="mt-2 text-slate-400 p-1 text-sm hover:text-slate-200 hover:cursor-pointer"
+                  >
+                    {product}
+                  </li>
+                );
               })}
             </ul>
           )}
@@ -42,12 +61,18 @@ export default function Profile() {
           <h1 className="ml-2">My products</h1>
         </div>
         <div className="border-l pl-2 pt-4">
-          {!user.myproducts ? (
+          {!products.length > 0 ? (
             <h1 className="text-slate-600">No published products</h1>
           ) : (
-            <ul>
-              {user.myproducts.map((product) => {
-                <li>{product.name}</li>;
+            <ul className="text-white">
+              {products.map((product, j) => {
+                return (
+                  <Link key={j} to={`product/${product.productId}`}>
+                    <li className="text-slate-300 p-1 text-sm hover:text-slate-200">
+                      {product.title}
+                    </li>
+                  </Link>
+                );
               })}
             </ul>
           )}

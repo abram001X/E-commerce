@@ -30,6 +30,7 @@ export default function Main({ id }) {
   useEffect(() => {
     setIsLoad(true);
     fetchProducts(id, searchValue, parseInt(price)).then((items) => {
+      
       setProducts(items);
       const number = [];
       items.map((obj) => {

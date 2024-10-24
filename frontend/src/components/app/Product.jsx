@@ -1,16 +1,35 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { singleProducts } from '../../lib/fetchProducts';
 import { IconCartPlus } from '../Icons';
+import { myCart } from '../../lib/api';
+import { AuthContext } from '../../provider/authProvider';
 
 export default function Product() {
   const [img, setImg] = useState(0);
   const [product, setProduct] = useState({});
   const { id } = useParams();
+  const { user, isAuthenticated, checkLogin } = useContext(AuthContext);
+  const navigate = useNavigate();
   useEffect(() => {
     singleProducts(id).then((product) => setProduct(product));
   }, [id]);
-  console.log(product);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+    if (!user.cart) {
+      const arrayProducts = [product.title];
+      myCart({ cart: JSON.stringify(arrayProducts) });
+      checkLogin();
+      return;
+    }
+
+    const cartProducts = [...user.cart, product.title];
+    myCart({ cart: JSON.stringify(cartProducts) });
+    checkLogin();
+  };
   if (product.category)
     return (
       <article className="flex-1 flex h-screen justify-center items-center">
@@ -64,9 +83,19 @@ export default function Product() {
               </h3>
               <p>{product.description}</p>
             </div>
-            <button className=" mt-6 w-32 p-1 items-center rounded-lg justify-around bg-blue-700 outline-none hover:opacity-65 active:bg-blue-600 flex">
-              <IconCartPlus fontSize="20px" /> Add to cart
-            </button>
+
+            {user.cart && !user.cart.includes(product.title) ? (
+              <button
+                onClick={handleSubmit}
+                className=" mt-6 w-32 p-1 items-center rounded-lg justify-around bg-blue-700 outline-none hover:opacity-65 active:bg-blue-600 flex"
+              >
+                <IconCartPlus fontSize="20px" /> Add to cart
+              </button>
+            ) : (
+              <button className="mt-6 w-52 p-1 items-center rounded-lg justify-around bg-red-700 outline-none hover:opacity-65 active:bg-blue-600 flex">
+                <IconCartPlus fontSize="20px" /> It`s already in the cart
+              </button>
+            )}
           </div>
         </section>
       </article>

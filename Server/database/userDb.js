@@ -25,6 +25,7 @@ class DbUsers {
         return { message: 'Password must be a string' }
       }
     }
+
     this.createUser = async function ({ username, email, password }) {
       const hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS)
       const id = crypto.randomUUID()
@@ -39,7 +40,10 @@ class DbUsers {
         } else return { message: 'email is not correct' }
       } catch (e) {
         console.error(e.message)
-        if (e.message === 'SQLITE_CONSTRAINT: SQLite error: UNIQUE constraint failed: users.username') {
+        if (
+          e.message ===
+          'SQLITE_CONSTRAINT: SQLite error: UNIQUE constraint failed: users.username'
+        ) {
           return { message: 'Username already exists' }
         }
       }
@@ -70,27 +74,83 @@ class DbUsers {
       }
       return { message: 'User does no exist' }
     }
+
     this.findByid = async function (id) {
       try {
         userData = await db.execute({
-          sql: 'SELECT id, username, email FROM users WHERE id = :id',
+          sql: 'SELECT id, username, email, cart FROM users WHERE id = :id',
           args: { id }
         })
       } catch (e) {
         return { message: e.message }
       }
       const responseDb = userData.rows[0]
-      console.log(responseDb)
       if (responseDb) {
-        const { id, username, email } = responseDb
+        const { id, username, email, cart } = responseDb
         return {
           id,
           username,
           email,
+          cart: JSON.parse(cart),
           message: 'User found'
         }
       }
     }
+
+    this.addProduct = async function ({
+      title,
+      categoryId,
+      price,
+      description,
+      img
+    }, id) {
+      try {
+        userData = await db.execute({
+          sql: 'INSERT INTO products(title, categoryId, price, description, images,id) VALUES (:title, :categoryId, :price, :description, :img, :id);',
+          args: { title, categoryId, price, description, img, id }
+        })
+      } catch (e) {
+        console.log(e)
+        return { message: e.message }
+      }
+      return { message: 'Product published' }
+    }
+
+    this.findProduct = async function (id) {
+      try {
+        userData = await db.execute({
+          sql: 'SELECT productId, title, description, images, categoryId FROM products WHERE id = :id',
+          args: { id }
+        })
+      } catch (e) {
+        console.log(e.message)
+        return { message: e }
+      }
+      const response = userData.rows[0]
+      if (!response) {
+        console.log(response)
+        return { message: 'error' }
+      }
+      const { productId, title, description, images, categoryId } = response
+      return {
+        productId, title, description, images: JSON.parse(images), categoryId
+      }
+    }
+
+    this.addMycart = async function (id, { cart }) {
+      console.log(id, cart)
+      try {
+        userData = await db.execute({
+          sql: 'UPDATE users SET cart = :cart WHERE id = :id;',
+          args: { cart, id }
+        })
+      } catch (e) {
+        console.log(e)
+        return { message: e }
+      }
+      return { message: 'Product Add!!' }
+    }
   }
 }
+
 export const User = new DbUsers()

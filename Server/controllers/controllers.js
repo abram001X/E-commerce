@@ -54,17 +54,14 @@ export const logout = (req, res) => {
   return res.sendStatus(200)
 }
 
-export const profile = async (req, res) => {
+export const addProducts = async (req, res) => {
   const { id } = req.user
   const userFound = await User.findByid(id)
   if (!userFound) {
     return res.status(401).json({ message: 'User not found' })
   }
-  return res.json({
-    id: userFound.id,
-    username: userFound.username,
-    email: userFound.email
-  })
+  const resProduct = await User.addProduct(req.body, id)
+  return res.json(resProduct)
 }
 
 export const verifyToken = async (req, res) => {
@@ -79,6 +76,27 @@ export const verifyToken = async (req, res) => {
   return res.json({
     id: userFound.id,
     username: userFound.username,
-    email: userFound.email
+    email: userFound.email,
+    cart: userFound.cart
   })
+}
+
+export const myProudcts = async (req, res) => {
+  const { id } = req.user
+  const userFound = await User.findByid(id)
+  if (!userFound) {
+    return res.status(401).json({ message: 'User not found' })
+  }
+  const resDb = await User.findProduct(id)
+  return res.json(resDb)
+}
+
+export const myCart = async (req, res) => {
+  const { id } = req.user
+  const userFound = await User.findByid(id)
+  if (!userFound) {
+    return res.status(401).json({ message: 'User not found' })
+  }
+  const resDb = await User.addMycart(id, req.body)
+  return res.json(resDb)
 }

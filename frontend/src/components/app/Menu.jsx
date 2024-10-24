@@ -13,15 +13,10 @@ export default function Menu() {
   }, []);
   const categoriesArray = [
     'Furniture',
-    'nuevo',
     'Electronics',
-    'mobl',
     'Shoes',
     'Miscellaneous',
     'Baby clothes',
-    'Rutvik',
-    'Electronics actualizado',
-    'nuevo actualizado'
   ];
 
   return (
