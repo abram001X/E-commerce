@@ -17,7 +17,7 @@ export default function Profile() {
     if (res.data.message == 'error') {
       return;
     }
-    setProducts([res.data]);
+    setProducts(res.data);
   };
   useEffect(() => {
     myProducts();

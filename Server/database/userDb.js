@@ -126,15 +126,20 @@ class DbUsers {
         console.log(e.message)
         return { message: e }
       }
-      const response = userData.rows[0]
+      const response = userData.rows
       if (!response) {
         console.log(response)
         return { message: 'error' }
       }
-      const { productId, title, description, images, categoryId } = response
-      return {
-        productId, title, description, images: JSON.parse(images), categoryId
-      }
+      return response.map((obj) => {
+        return {
+          productId: obj.productId,
+          title: obj.title,
+          description: obj.description,
+          images: JSON.parse(obj.images),
+          categoryId: obj.categoryId
+        }
+      }) // images: JSON.parse(images)
     }
 
     this.addMycart = async function (id, { cart }) {

@@ -84,14 +84,16 @@ export default function Product() {
               <p>{product.description}</p>
             </div>
 
-            {user.cart && !user.cart.includes(product.title) ? (
-              <button
-                onClick={handleSubmit}
-                className=" mt-6 w-32 p-1 items-center rounded-lg justify-around bg-blue-700 outline-none hover:opacity-65 active:bg-blue-600 flex"
-              >
-                <IconCartPlus fontSize="20px" /> Add to cart
-              </button>
-            ) : (
+            {!user ||
+              (!user.cart.includes(product.title) && (
+                <button
+                  onClick={handleSubmit}
+                  className=" mt-6 w-32 p-1 items-center rounded-lg justify-around bg-blue-700 outline-none hover:opacity-65 active:bg-blue-600 flex"
+                >
+                  <IconCartPlus fontSize="20px" /> Add to cart
+                </button>
+              ))}
+            {user && user.cart && user.cart.includes(product.title) && (
               <button className="mt-6 w-52 p-1 items-center rounded-lg justify-around bg-red-700 outline-none hover:opacity-65 active:bg-blue-600 flex">
                 <IconCartPlus fontSize="20px" /> It`s already in the cart
               </button>
