@@ -34,7 +34,7 @@ export const addProducts = async (data) => {
 
 export const myCart = async (data) => {
   return axios
-    .post('/my-cart', data)
+    .post('/api/my-cart', data)
     .then((res) => {
       return res;
     })
@@ -44,7 +44,7 @@ export const myCart = async (data) => {
 };
 export const findProducts = async ()=>{
   return axios
-    .get('/my-products')
+    .get('/api/my-products')
     .then((res) => {
       return res;
     })
@@ -54,7 +54,7 @@ export const findProducts = async ()=>{
 }
 export const verifyTokenRequest = async () => {
   return axios
-    .get('/verify')
+    .get('/api/verify')
     .then((res) => {
       return res;
     })

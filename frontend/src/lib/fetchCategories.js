@@ -1,9 +1,18 @@
+import axios from './axios.js';
+
 export async function fetchCategories() {
-  const response = await fetch('https://api.escuelajs.co/api/v1/categories');
-  const data = await response.json();
-  return data.map((obj) => ({
-    id: obj.id,
-    name: obj.name,
-    image: obj.image
-  }));
+  return axios
+    .get('/api/get-categories')
+    .then((res) => {
+      return res.data.map((category) => {
+        return {
+          id: category.categoryID,
+          name: category.name,
+          image: category.image
+        };
+      });
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
 }

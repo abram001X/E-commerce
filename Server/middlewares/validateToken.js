@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { SECRET_JWT_KEY } from '../config.js'
+
 export function validateToken (req, res, next) {
   const { accessToken } = req.cookies
   if (!accessToken) {

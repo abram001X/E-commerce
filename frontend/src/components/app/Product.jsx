@@ -12,24 +12,28 @@ export default function Product() {
   const { user, isAuthenticated, checkLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   useEffect(() => {
-    singleProducts(id).then((product) => setProduct(product));
+    getProduct(id);
   }, [id]);
+  const getProduct = async (id) => {
+    const res = await singleProducts(id);
+    if (!res.message) setProduct(res);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isAuthenticated) {
       navigate('/login');
     }
-    if (!user.cart) {
+    if (!user || !user.cart) {
       const arrayProducts = [product.title];
       myCart({ cart: JSON.stringify(arrayProducts) });
       checkLogin();
       return;
     }
-
     const cartProducts = [...user.cart, product.title];
     myCart({ cart: JSON.stringify(cartProducts) });
     checkLogin();
   };
+
   if (product.category)
     return (
       <article className="flex-1 flex h-screen justify-center items-center">
@@ -84,18 +88,16 @@ export default function Product() {
               <p>{product.description}</p>
             </div>
 
-            {!user ||
-              (!user.cart.includes(product.title) && (
-                <button
-                  onClick={handleSubmit}
-                  className=" mt-6 w-32 p-1 items-center rounded-lg justify-around bg-blue-700 outline-none hover:opacity-65 active:bg-blue-600 flex"
-                >
-                  <IconCartPlus fontSize="20px" /> Add to cart
-                </button>
-              ))}
-            {user && user.cart && user.cart.includes(product.title) && (
+            {user && user.cart && user.cart.includes(product.title) ? (
               <button className="mt-6 w-52 p-1 items-center rounded-lg justify-around bg-red-700 outline-none hover:opacity-65 active:bg-blue-600 flex">
                 <IconCartPlus fontSize="20px" /> It`s already in the cart
+              </button>
+            ) : (
+              <button
+                onClick={handleSubmit}
+                className=" mt-6 w-32 p-1 items-center rounded-lg justify-around bg-blue-700 outline-none hover:opacity-65 active:bg-blue-600 flex"
+              >
+                <IconCartPlus fontSize="20px" /> Add to cart
               </button>
             )}
           </div>

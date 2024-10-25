@@ -17,7 +17,7 @@ export default function Login() {
     const res = await signin(data);
     setMsg(res.message);
     if (res.message == 'Login succesfull!!') {
-      navigate('/');
+      navigate('/add-products');
     }
   };
   if(isAuthenticated) return <Navigate to={'/'}/>

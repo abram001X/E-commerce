@@ -11,7 +11,7 @@ export default function Gallery({ product }) {
     } else setIndexImages(indexImages == 0 ? 2 : indexImages - 1);
   };
 
-  if (!product.images[0][0].includes('"'))
+  if (!product.images[0].includes('"'))
     return (
       <article className="w-full flex flex-col p-2 hover:bg-slate-800 rounded-sm transition-all ">
         <div className="pb-0 flex w-full justify-between items-center cont_img">
@@ -23,7 +23,7 @@ export default function Gallery({ product }) {
           </div>
           <div>
             <img
-              src={product.images[0][indexImages]}
+              src={product.images[indexImages]}
               className="rounded-md object-cover"
             />
           </div>
@@ -60,20 +60,3 @@ export default function Gallery({ product }) {
       </article>
     );
 }
-
-/* {
-    "id": 4,
-    "title": "Handmade Fresh Table",
-    "price": 687,
-    "description": "Andy shoes are designed to keeping in...",
-    "category": {
-      "id": 5,
-      "name": "Others",
-      "image": "https://placeimg.com/640/480/any?r=0.591926261873231"
-    },
-    "images": [
-      "https://placeimg.com/640/480/any?r=0.9178516507833767",
-      "https://placeimg.com/640/480/any?r=0.9300320592588625",
-      "https://placeimg.com/640/480/any?r=0.8807778235430017"
-    ]
-  }*/

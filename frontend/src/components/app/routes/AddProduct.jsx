@@ -21,6 +21,7 @@ export default function AddProduct() {
   const categoriesArray = [
     'Furniture',
     'Electronics',
+    'Clothes',
     'Shoes',
     'Miscellaneous',
     'Baby clothes'

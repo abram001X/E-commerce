@@ -3,27 +3,32 @@ import { useState } from 'react';
 import { fetchCategories } from '../../lib/fetchCategories';
 import Filter from '../Main-components/Filter';
 import { Link } from 'react-router-dom';
-import {ProductsContext} from '../../provider/ProductsProvider.jsx';
+import { ProductsContext } from '../../provider/ProductsProvider.jsx';
 
 export default function Menu() {
   const [categories, setCategories] = useState([]);
   const { setPrice, setSearchValue } = useContext(ProductsContext);
   useEffect(() => {
-    fetchCategories().then((item) => setCategories(item));
+    getCategories();
   }, []);
+  const getCategories = async () => {
+    const res = await fetchCategories()
+    setCategories(res)
+  };
   const categoriesArray = [
     'Furniture',
     'Electronics',
+    'Clothes',
     'Shoes',
-    'Miscellaneous',
-    'Baby clothes',
+    'Miscellaneous'
   ];
 
   return (
+    <>
       <aside id="aside" className=" bg-black w-1/5  flex flex-col text-white">
         <nav className="flex flex-col fixed">
-          <ul>
             <Filter />
+          <ul>
             <h1 className="ml-3 font-semibold">Categories</h1>
             <li className="flex p-2 h-12 items-end ml-3 pl-3 border-l border-slate-700 text-gray-500 ">
               <Link
@@ -37,6 +42,7 @@ export default function Menu() {
                 All
               </Link>
             </li>
+
             {categories.map((obj) => {
               if (categoriesArray.includes(obj.name)) {
                 return (
@@ -65,5 +71,6 @@ export default function Menu() {
           </ul>
         </nav>
       </aside>
+    </>
   );
 }

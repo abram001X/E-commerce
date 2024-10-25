@@ -1,3 +1,4 @@
+import axios from './axios.js';
 export async function fetchProducts(id, searchValue, maxPrice) {
   let fetching;
   if (id && maxPrice) {
@@ -9,7 +10,7 @@ export async function fetchProducts(id, searchValue, maxPrice) {
   } else if (maxPrice && !id) {
     fetching = `https://api.escuelajs.co/api/v1/products/?price_min=1&price_max=${maxPrice}&offset=0&limit=80`;
   } else {
-    fetching = 'https://api.escuelajs.co/api/v1/products?offset=0&limit=80';
+    fetching = 'http://localhost:3000/api/get-products/all';
   }
 
   const response = await fetch(fetching);
@@ -24,11 +25,18 @@ export async function fetchProducts(id, searchValue, maxPrice) {
       name: items.category.name,
       image: items.category.image
     },
-    images: [items.images]
+    images: items.images
   }));
 }
 
 export async function singleProducts(id){
-  const response = await fetch(`https://api.escuelajs.co/api/v1/products/${id}`)
-  return await response.json()
+  return axios
+    .get(`/api/get-products/${id}`)
+    .then((res) => {
+      return res.data
+    })
+    .catch((error) => {
+      console.log(error.response.data)
+      return error.response.data;
+    });
 }

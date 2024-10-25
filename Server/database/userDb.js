@@ -96,65 +96,6 @@ class DbUsers {
         }
       }
     }
-
-    this.addProduct = async function ({
-      title,
-      categoryId,
-      price,
-      description,
-      img
-    }, id) {
-      try {
-        userData = await db.execute({
-          sql: 'INSERT INTO products(title, categoryId, price, description, images,id) VALUES (:title, :categoryId, :price, :description, :img, :id);',
-          args: { title, categoryId, price, description, img, id }
-        })
-      } catch (e) {
-        console.log(e)
-        return { message: e.message }
-      }
-      return { message: 'Product published' }
-    }
-
-    this.findProduct = async function (id) {
-      try {
-        userData = await db.execute({
-          sql: 'SELECT productId, title, description, images, categoryId FROM products WHERE id = :id',
-          args: { id }
-        })
-      } catch (e) {
-        console.log(e.message)
-        return { message: e }
-      }
-      const response = userData.rows
-      if (!response) {
-        console.log(response)
-        return { message: 'error' }
-      }
-      return response.map((obj) => {
-        return {
-          productId: obj.productId,
-          title: obj.title,
-          description: obj.description,
-          images: JSON.parse(obj.images),
-          categoryId: obj.categoryId
-        }
-      }) // images: JSON.parse(images)
-    }
-
-    this.addMycart = async function (id, { cart }) {
-      console.log(id, cart)
-      try {
-        userData = await db.execute({
-          sql: 'UPDATE users SET cart = :cart WHERE id = :id;',
-          args: { cart, id }
-        })
-      } catch (e) {
-        console.log(e)
-        return { message: e }
-      }
-      return { message: 'Product Add!!' }
-    }
   }
 }
 

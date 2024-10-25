@@ -1,6 +1,8 @@
 import { SECRET_JWT_KEY } from '../config.js'
 import jwt from 'jsonwebtoken'
 import { User } from '../database/userDb.js'
+import { Products } from '../database/productsDb.js'
+
 export const register = async (req, res) => {
   const data = req.body
   try {
@@ -60,7 +62,7 @@ export const addProducts = async (req, res) => {
   if (!userFound) {
     return res.status(401).json({ message: 'User not found' })
   }
-  const resProduct = await User.addProduct(req.body, id)
+  const resProduct = await Products.addProduct(req.body, id)
   return res.json(resProduct)
 }
 
@@ -87,7 +89,7 @@ export const myProudcts = async (req, res) => {
   if (!userFound) {
     return res.status(401).json({ message: 'User not found' })
   }
-  const resDb = await User.findProduct(id)
+  const resDb = await Products.findByProduct(id)
   return res.json(resDb)
 }
 
@@ -97,6 +99,34 @@ export const myCart = async (req, res) => {
   if (!userFound) {
     return res.status(401).json({ message: 'User not found' })
   }
-  const resDb = await User.addMycart(id, req.body)
+  const resDb = await Products.addMycart(id, req.body)
   return res.json(resDb)
+}
+
+export const getApiAllProducts = async (req, res) => {
+  let productsDb
+  console.log(req.params.id)
+  if (req.params.id !== 'all') {
+    productsDb = await Products.getSingleProducts(req.params.id)
+  } else productsDb = await Products.getAllProducts()
+  if (productsDb.message) {
+    return res.status(401).json(productsDb)
+  }
+  return res.send(productsDb)
+}
+
+export const getApiCategories = async (req, res) => {
+  const productsDb = await Products.getCategories()
+  if (productsDb.message) {
+    return res.status(401).json(productsDb)
+  }
+  return res.send(productsDb)
+}
+
+export const getSingleProduct = async (req, res) => {
+  const productsDb = await Products.getSingleProducts(req.param.id)
+  if (productsDb.message) {
+    return res.status(401).json(productsDb)
+  }
+  return res.send(productsDb)
 }

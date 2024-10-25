@@ -29,23 +29,24 @@ export default function Main({ id }) {
     useContext(ProductsContext);
   useEffect(() => {
     setIsLoad(true);
-    fetchProducts(id, searchValue, parseInt(price)).then((items) => {
-      
-      setProducts(items);
-      const number = [];
-      items.map((obj) => {
-        if (!obj.images[0][0].includes('"')) {
-          number.push(obj.price);
-        }
-      });
-      if (!max) {
-        setMax(Math.max(...number));
-      }
-      setIsLoad(false);
-    });
+    getAllProducts()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, searchValue, price, highPrice]);
-
+  const getAllProducts = async () => {
+    const res = await fetchProducts(id, searchValue, parseInt(price));
+    setProducts(res);
+    console.log(res);
+    const number = [];
+    res.map((obj) => {
+      if (!obj.images[0].includes('"')) {
+        number.push(obj.price);
+      }
+    });
+    if (!max) {
+      setMax(Math.max(...number));
+    }
+    setIsLoad(false);
+  };
   return (
     <>
       <Menu />
@@ -53,6 +54,7 @@ export default function Main({ id }) {
         {isLoad && (
           <div className="border border-white w-56 fixed z-50 load"></div>
         )}
+
         <section className="grid place-content-center w-full p-0">
           {highPrice
             ? products
