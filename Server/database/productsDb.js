@@ -10,7 +10,31 @@ const db = createClient({
 class DbProducts {
   constructor () {
     let userData
-
+    function apiProductsJson (items, category) {
+      return {
+        id: items.productId,
+        title: items.title,
+        price: items.price,
+        description: items.description,
+        category: {
+          id: category.categoryID,
+          name: category.name,
+          image: category.image
+        },
+        images: JSON.parse(items.images)
+      }
+    }
+    function apiProductsArray (response, categories) {
+      const products = []
+      response.forEach((items) => {
+        categories.forEach((category) => {
+          if (category.categoryID === items.categoryId) {
+            products.push(apiProductsJson(items, category))
+          }
+        })
+      })
+      return products
+    }
     this.addProduct = async function (
       { title, categoryId, price, description, img },
       id
@@ -54,7 +78,6 @@ class DbProducts {
     }
 
     this.addMycart = async function (id, { cart }) {
-      console.log(id, cart)
       try {
         userData = await db.execute({
           sql: 'UPDATE users SET cart = :cart WHERE id = :id',
@@ -87,26 +110,8 @@ class DbProducts {
         console.log(e)
         return { message: e.message }
       }
-      const products = []
-      userData.rows.forEach((items) => {
-        categories.forEach((category) => {
-          if (category.categoryID === items.categoryId) {
-            products.push({
-              id: items.productId,
-              title: items.title,
-              price: items.price,
-              description: items.description,
-              category: {
-                id: category.categoryID,
-                name: category.name,
-                image: category.image
-              },
-              images: JSON.parse(items.images)
-            })
-          }
-        })
-      })
-      return products
+      const res = apiProductsArray(userData.rows, categories)
+      return res
     }
     this.getSingleProducts = async function (id) {
       try {
@@ -128,18 +133,74 @@ class DbProducts {
         args: { categoryId }
       })
       const category = categoryDb.rows[0]
-      return {
-        id: response.productId,
-        title: response.title,
-        description: response.description,
-        images: JSON.parse(response.images),
-        price: response.price,
-        category: {
-          id: category.categoryID,
-          name: category.name,
-          image: category.image
-        }
+      const res = apiProductsJson(response, category)
+      return res
+    }
+    this.getProductsByRangePrice = async function (price) {
+      const categories = await this.getCategories()
+      try {
+        if (!categories.message) {
+          userData = await db.execute({
+            sql: 'SELECT productId, title, description, images,price, categoryId FROM products WHERE price >= :price',
+            args: { price }
+          })
+        } else return categories
+      } catch (e) {
+        console.log(e)
+        return { message: e.message }
       }
+      const res = apiProductsArray(userData.rows, categories)
+      return res
+    }
+    this.getProductsByCategory = async function (id) {
+      const categories = await this.getCategories()
+      try {
+        if (!categories.message) {
+          userData = await db.execute({
+            sql: 'SELECT productId, title, description, images, price, categoryId FROM products WHERE categoryId = :id',
+            args: { id }
+          })
+        } else return categories
+      } catch (e) {
+        console.log(e)
+        return { message: e.message }
+      }
+      const res = apiProductsArray(userData.rows, categories)
+      return res
+    }
+    this.getProductsByTitle = async function (param) {
+      const categories = await this.getCategories()
+      const title = '%' + param + '%'
+      try {
+        if (!categories.message) {
+          userData = await db.execute({
+            sql: 'SELECT productId, title, description, images, price, categoryId FROM products WHERE title LIKE :title',
+            args: { title }
+          })
+        } else return categories
+      } catch (e) {
+        console.log(e)
+        return { message: e.message }
+      }
+      const res = apiProductsArray(userData.rows, categories)
+      return res
+    }
+    this.getProductsByPrice = async function (price, id) {
+      const categories = await this.getCategories()
+      try {
+        if (!categories.message) {
+          userData = await db.execute({
+            sql: 'SELECT productId, title, description, images, price, categoryId FROM products WHERE  categoryId = :id AND price > :price',
+            args: { id, price }
+          })
+        } else return categories
+      } catch (e) {
+        console.log(e)
+        return { message: e.message }
+      }
+      const res = apiProductsArray(userData.rows, categories)
+      // console.log(res)
+      return res
     }
   }
 }

@@ -25,27 +25,27 @@ const orderByHighPrice = (a, b) => {
 export default function Main({ id }) {
   const [products, setProducts] = useState([]);
   const [isLoad, setIsLoad] = useState(true);
+  const [noSearchValue, setNoSearchValue] = useState(null);
   const { searchValue, setMax, price, max, highPrice } =
     useContext(ProductsContext);
   useEffect(() => {
     setIsLoad(true);
-    getAllProducts()
+    getAllProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, searchValue, price, highPrice]);
   const getAllProducts = async () => {
     const res = await fetchProducts(id, searchValue, parseInt(price));
     setProducts(res);
-    console.log(res);
+    if (!res.length > 0) {
+      setIsLoad(false);
+      return setNoSearchValue('Product not found');
+    }
     const number = [];
-    res.map((obj) => {
-      if (!obj.images[0].includes('"')) {
-        number.push(obj.price);
-      }
-    });
     if (!max) {
       setMax(Math.max(...number));
     }
     setIsLoad(false);
+    setNoSearchValue('');
   };
   return (
     <>
@@ -54,7 +54,12 @@ export default function Main({ id }) {
         {isLoad && (
           <div className="border border-white w-56 fixed z-50 load"></div>
         )}
-
+          {products[1] && id   ? (
+            <h1 className="text-white text-2xl pl-3">{products[0].category.name}</h1>
+          ) : (
+            <h1 className="text-white text-2xl pl-3">All products</h1>
+          )}
+        <h3 className="text-red-700 text-center">{noSearchValue}</h3>
         <section className="grid place-content-center w-full p-0">
           {highPrice
             ? products

@@ -12,7 +12,7 @@ section{
   margin: 0;
 }
 .load{
-  animation: load 2s linear;
+  animation: load 2s linear infinite;
 }
 .img_svg{
   display: none;
@@ -25,10 +25,10 @@ section{
 }
 @keyframes load {
   0%{
+    display: block;
     left: -80%;
   }
   100%{
-    left: 78%;
-    display: none;
+    left: 100%;
   }
 }

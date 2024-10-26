@@ -103,12 +103,8 @@ export const myCart = async (req, res) => {
   return res.json(resDb)
 }
 
-export const getApiAllProducts = async (req, res) => {
-  let productsDb
-  console.log(req.params.id)
-  if (req.params.id !== 'all') {
-    productsDb = await Products.getSingleProducts(req.params.id)
-  } else productsDb = await Products.getAllProducts()
+export const getApiByIdProduct = async (req, res) => {
+  const productsDb = await Products.getSingleProducts(req.params.id)
   if (productsDb.message) {
     return res.status(401).json(productsDb)
   }
@@ -123,10 +119,25 @@ export const getApiCategories = async (req, res) => {
   return res.send(productsDb)
 }
 
-export const getSingleProduct = async (req, res) => {
-  const productsDb = await Products.getSingleProducts(req.param.id)
-  if (productsDb.message) {
-    return res.status(401).json(productsDb)
-  }
+export const getProducts = async (req, res) => {
+  let productsDb
+  if (req.query.price_max && req.query.category_id) {
+    productsDb = await Products.getProductsByPrice(req.query.price_max, req.query.category_id)
+    if (productsDb.message) {
+      return res.status(401).json(productsDb)
+    }
+  } else if (req.query.price_max) {
+    productsDb = await Products.getProductsByRangePrice(req.query.price_max)
+    if (productsDb.message) {
+      return res.status(401).json(productsDb)
+    }
+  } else if (req.query.category_id) {
+    productsDb = await Products.getProductsByCategory(req.query.category_id)
+    if (productsDb.message) {
+      return res.status(401).json(productsDb)
+    }
+  } else if (req.query.title) {
+    productsDb = await Products.getProductsByTitle(req.query.title)
+  } else productsDb = await Products.getAllProducts()
   return res.send(productsDb)
 }

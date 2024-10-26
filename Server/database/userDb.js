@@ -19,7 +19,7 @@ class DbUsers {
         return { message: 'Username is incorrect' }
       }
       if (username.length <= 3) {
-        return { message: 'Username has has to be greater than 3' }
+        return { message: 'Username has to be greater than 3' }
       }
       if (typeof password !== 'string') {
         return { message: 'Password must be a string' }

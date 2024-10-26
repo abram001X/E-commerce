@@ -52,7 +52,7 @@ export default function Menu() {
                   >
                     <Link
                       to={`/category/${obj.id}`}
-                      className="text-sm w-full flex hover:text-white hover:bg-gray-900 p-1 rounded-md "
+                      className="text-sm w-full flex hover:text-white hover:bg-gray-900 p-1 rounded-md"
                       onClick={() => {
                         setPrice(0);
                         setSearchValue('');
