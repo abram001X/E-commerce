@@ -20,8 +20,9 @@ export default function Filter() {
   };
   return (
     <section className="mb-7 mt-3 flex flex-col p-3 pt-0 min-h-32 justify-between">
-      <form onSubmit={sendValue}>
+      <form  id='item' onSubmit={sendValue}>
         <input
+          name='item'
           onChange={handleSearch}
           type="search"
           className="bg-black mt-2  p-1 border-b border-b-blue-700 outline-none focus:bg-slate-900"

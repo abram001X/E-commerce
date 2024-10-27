@@ -37,6 +37,7 @@ export default function SignUp() {
         Create a strong password with combined letters, numbers and symbols.
       </p>
       <form
+        id='register'
         action="POST"
         className="flex flex-col text-black justify-around min-h-96"
         onSubmit={registerUser}
@@ -44,6 +45,7 @@ export default function SignUp() {
         {' '}
         <div className="flex flex-col">
           <input
+          name='register'
             onChange={(e) => {
               setUsername(e.target.value);
               setError(false);
@@ -56,6 +58,8 @@ export default function SignUp() {
         </div>
         <div className="flex flex-col">
           <input
+          
+          name='register'
             onChange={(e) => {
               setEmail(e.target.value);
               setError(false);
@@ -67,6 +71,8 @@ export default function SignUp() {
         </div>
         <div className="flex flex-col pb-3">
           <input
+          
+          name='register'
             onChange={(e) => {
               setPassword(e.target.value);
               setError(false);
@@ -76,6 +82,8 @@ export default function SignUp() {
             className=" p-2 mb-5 mt-2 border-b border-b-blue-700 outline-none focus:bg-gray-200"
           />
           <input
+          
+          name='register'
             onChange={(e) => {
               setConfirm(e.target.value);
               setError(false);

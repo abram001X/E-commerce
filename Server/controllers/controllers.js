@@ -36,8 +36,7 @@ export const login = async (req, res) => {
       .cookie('accessToken', token, {
         secure: true,
         sameSite: 'none',
-        httpOnly: true,
-        domain: 'e-commerce-fake.onrender.com'
+        httpOnly: true
       })
       .json({
         user,
