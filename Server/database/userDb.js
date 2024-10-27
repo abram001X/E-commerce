@@ -2,7 +2,7 @@ import { createClient } from '@libsql/client'
 import { config } from 'dotenv'
 import crypto from 'crypto'
 
-import bcrypt from 'bcrypt'
+import bcryptjs from 'bcryptjs'
 import { SALT_ROUNDS } from '../config.js'
 
 config()
@@ -27,7 +27,7 @@ class DbUsers {
     }
 
     this.createUser = async function ({ username, email, password }) {
-      const hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS)
+      const hashedPassword = bcryptjs.hashSync(password, SALT_ROUNDS)
       const id = crypto.randomUUID()
       const userValid = validation(username, password)
       if (userValid) return userValid
@@ -63,7 +63,7 @@ class DbUsers {
       }
       const responseDb = userData.rows[0]
       if (responseDb) {
-        const isValid = bcrypt.compareSync(password, responseDb.password)
+        const isValid = bcryptjs.compareSync(password, responseDb.password)
         if (!isValid) return { message: 'Password invallid' }
         const { id, username, email } = responseDb
         return {
