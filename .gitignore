@@ -4,3 +4,6 @@
 ./Notas
 Notas
 .Notas
+/node_modules
+node_modules
+./node_modules
