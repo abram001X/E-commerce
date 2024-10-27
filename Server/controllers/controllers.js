@@ -37,7 +37,7 @@ export const login = async (req, res) => {
         secure: true,
         sameSite: 'none',
         httpOnly: true,
-        domain: 'ecommercefake.netlify.app'
+        domain: 'e-commerce-fake.onrender.com'
       })
       .json({
         user,
