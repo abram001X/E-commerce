@@ -32,7 +32,6 @@ export default function AddProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setPrice(parseInt(price));
-    console.log(JSON.stringify(img));
 
     if (!price) {
       setErorrInput('Price  invalid');
@@ -50,14 +49,11 @@ export default function AddProduct() {
       description,
       img: JSON.stringify(img)
     };
-    const res = await addProducts(product);
-    console.log(res);
+    addProducts(product);
   };
 
   const handleFile = (e) => {
     let isImg = false;
-    console.log(e.target.files.length);
-    console.log(e.target.files);
     if (e.target.files) {
       for (let index = 0; index < extensionesImagenes.length; index++) {
         const image1 = e.target.files[0].name.endsWith(

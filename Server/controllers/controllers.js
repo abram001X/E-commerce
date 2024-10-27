@@ -36,7 +36,8 @@ export const login = async (req, res) => {
       .cookie('accessToken', token, {
         secure: true,
         sameSite: 'none',
-        httpOnly: false
+        httpOnly: true,
+        domain: 'ecommercefake.netlify.app'
       })
       .json({
         user,
@@ -50,9 +51,7 @@ export const login = async (req, res) => {
 }
 
 export const logout = (req, res) => {
-  res.cookie('accessToken', '', {
-    expires: new Date(0)
-  })
+  res.clearCookie('accessToken')
   return res.sendStatus(200)
 }
 

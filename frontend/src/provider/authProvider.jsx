@@ -32,7 +32,6 @@ export default function AuthProvider({ children }) {
   const checkLogin = async () => {
     const cookies = Cookies.get();
     if (!cookies.accessToken) {
-      console.log('bad');
       setIsAuthenticated(false);
       setUser(null);
       setIsLoading(false);
