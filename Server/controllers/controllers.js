@@ -35,9 +35,9 @@ export const login = async (req, res) => {
     res
       .cookie('accessToken', token, {
         secure: true,
-        sameSite: 'lax',
+        sameSite: 'none',
         httpOnly: true,
-        domain: 'ecommercefake.netlify.app'
+        domain: 'e-commerce-fake.onrender.com'
       })
       .json({
         user,
