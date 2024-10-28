@@ -36,7 +36,8 @@ export const login = async (req, res) => {
       .cookie('accessToken', token, {
         secure: true,
         sameSite: 'none',
-        httpOnly: true
+        httpOnly: true,
+        domain: 'ecommercefake.netlify.app'
       })
       .json({
         user,
