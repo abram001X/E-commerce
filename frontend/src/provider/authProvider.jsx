@@ -25,7 +25,10 @@ export default function AuthProvider({ children }) {
       }
       return res.data;
     } catch (e) {
-      console.log(e.message);
+      const error = e.message
+      if(error){
+        console.log('error')
+      }
     }
   };
 
@@ -48,7 +51,10 @@ export default function AuthProvider({ children }) {
       setUser(res.data);
       setIsLoading(false);
     } catch (e) {
-      console.log(e.message);
+      const error = e.message
+      if(error){
+        console.log('error')
+      }
       setIsLoading(false);
       setIsAuthenticated(false);
       setUser(null);

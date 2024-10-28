@@ -6,7 +6,6 @@ export const loginRequest = async (data) => {
       return res;
     })
     .catch((error) => {
-      console.log(error.response);
       return error.response;
     });
 };
