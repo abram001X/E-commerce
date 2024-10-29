@@ -37,7 +37,7 @@ export const login = async (req, res) => {
         httpOnly: false,
         secure: true,
         sameSite: 'none',
-        domain: 'https://e-commerce-kzxt.onrender.com'
+        domain: 'e-commerce-kzxt.onrender.com'
       })
       .json({
         user,
