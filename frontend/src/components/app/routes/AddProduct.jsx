@@ -133,24 +133,27 @@ export default function AddProduct() {
         <div className="text-white flex flex-col h-full p-3 pt-0">
           <h1 className="text-2xl mb-7">Publish new product</h1>
           <form
+            id='addProducts'
             action="POST"
             className="flex flex-col text-base"
             onSubmit={handleSubmit}
           >
-            <label className="mb-2 text-slate-400">
+            <label htmlFor='Product' className="mb-2 text-slate-400">
               Enter the name of the product
             </label>
             <input
+              name='addProducts'
               onChange={(e) => setTitle(e.target.value)}
               type="text"
+              id='Product'
               placeholder="Title product"
               className="text-black   outline-none p-1 focus:bg-gray-200 "
             />
-            <label className="mt-3 text-slate-400">Choose a category</label>
+            <label htmlFor='Category'  className="mt-3 text-slate-400">Choose a category</label>
             <select
               onChange={(e) => setCategoryId(e.target.value)}
               name="category"
-              id="category"
+              id="Category"
               className="text-black   outline-none p-1 focus:bg-gray-200 "
             >
               {categoriesArray.map((name, j) => {
@@ -161,20 +164,24 @@ export default function AddProduct() {
                 );
               })}
             </select>
-            <label className="mt-3 text-slate-400">Enter the price</label>
+            <label htmlFor='Price'  className="mt-3 text-slate-400">Enter the price</label>
             <input
+              id='Price'
+              name='addProducts'
               onChange={(e) => setPrice(e.target.value)}
               type="text"
               placeholder="Price"
               className="text-black   outline-none p-1 focus:bg-gray-200 "
             />
 
-            <label className="mt-3 text-slate-400">
+            <label htmlFor='Description'  className="mt-3 text-slate-400">
               Enter description of the products
             </label>
             <textarea
+              name='addProducts'
               onChange={(e) => setDescription(e.target.value)}
               type="text"
+              id='Description'
               className="text-black   outline-none p-1 focus:bg-gray-200 "
             />
             {errorInput && <h1 className="text-red-700">{errorInput}</h1>}

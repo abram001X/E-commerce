@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../provider/authProvider'; 
+import { AuthContext } from '../../provider/authProvider';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -20,11 +20,10 @@ export default function Login() {
       navigate('/add-products');
     }
   };
-  if(isAuthenticated) return <Navigate to={'/'}/>
+  if (isAuthenticated) return <Navigate to={'/'} />;
   return (
     <form
-    
-      id='login'
+      id="login"
       action="POST"
       className="flex flex-col text-black justify-around min-h-96"
       onSubmit={loginUser}
@@ -33,7 +32,7 @@ export default function Login() {
       <p>Enter your username, password & email </p>
       <div className="flex flex-col">
         <input
-          name='login'
+          name="login"
           type="text"
           placeholder="Username"
           className="p-2 w-96 text-black border-b border-b-blue-700 outline-none focus:bg-gray-200"
@@ -45,7 +44,7 @@ export default function Login() {
       </div>
       <div className="flex flex-col  pb-3">
         <input
-          name='login'
+          name="login"
           type="password"
           placeholder="Password"
           className="p-2 border-b border-b-blue-700  outline-none focus:bg-gray-200"

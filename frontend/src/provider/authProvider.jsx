@@ -12,29 +12,31 @@ export default function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(false);
   const logout = () => {
-    Cookies.remove('accessToken');
+    Cookies.remove('accessTokenFron');
     setUser(null);
     setIsAuthenticated(false);
   };
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
+
+      Cookies.set('accessTokenFron', res.data.token, {
+        expires: 1
+      });
+      console.log(res);
       if (res.data.user) {
         setUser(res.data.user);
         setIsAuthenticated(true);
       }
       return res.data;
     } catch (e) {
-      const error = e.message
-      if(error){
-        console.log('error')
-      }
+      console.log(e);
     }
   };
 
   const checkLogin = async () => {
     const cookies = Cookies.get();
-    if (!cookies.accessToken) {
+    if (!cookies.accessTokenFron) {
       setIsAuthenticated(false);
       setUser(null);
       setIsLoading(false);
@@ -51,10 +53,7 @@ export default function AuthProvider({ children }) {
       setUser(res.data);
       setIsLoading(false);
     } catch (e) {
-      const error = e.message
-      if(error){
-        console.log('error')
-      }
+      console.log(e);
       setIsLoading(false);
       setIsAuthenticated(false);
       setUser(null);
