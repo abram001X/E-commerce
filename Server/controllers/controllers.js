@@ -34,10 +34,9 @@ export const login = async (req, res) => {
     )
     res
       .cookie('accessToken', token, {
-        httpOnly: false,
         secure: true,
         sameSite: 'none',
-        domain: 'e-commerce-kzxt.onrender.com'
+        httpOnly: false
       })
       .json({
         user,
