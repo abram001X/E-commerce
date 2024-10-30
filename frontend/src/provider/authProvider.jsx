@@ -23,7 +23,6 @@ export default function AuthProvider({ children }) {
       Cookies.set('accessTokenFron', res.data.token, {
         expires: 1
       });
-      console.log(res);
       if (res.data.user) {
         setUser(res.data.user);
         setIsAuthenticated(true);

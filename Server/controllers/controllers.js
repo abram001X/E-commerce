@@ -60,6 +60,7 @@ export const addProducts = async (req, res) => {
   if (!userFound) {
     return res.status(401).json({ message: 'User not found' })
   }
+  console.log(req.body)
   const resProduct = await Products.addProduct(req.body, id)
   return res.json(resProduct)
 }
