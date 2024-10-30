@@ -1,7 +1,7 @@
 import { useContext, useRef, useState } from 'react';
 import { IconFileImage } from '../../Icons';
 import { AuthContext } from '../../../provider/authProvider';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { addProducts } from '../../../lib/api';
 
 export default function AddProduct() {
@@ -147,7 +147,7 @@ export default function AddProduct() {
             >
               {categoriesArray.map((name, j) => {
                 return (
-                  <option key={j} value={j}>
+                  <option key={j} value={j+1}>
                     {name}
                   </option>
                 );
@@ -176,7 +176,7 @@ export default function AddProduct() {
               className="text-black resize-none h-32 outline-none p-1 focus:bg-gray-200 "
             />
             {errorInput && <h1 className="text-red-700">{errorInput}</h1>}
-           {!msg ?  <button className="bg-blue-500 mt-7">Post</button>: <p className='text-green-600 mt-7'>{msg}</p>}
+           {!msg ?  <button className="bg-blue-500 mt-7">Post</button>: <p className='text-green-600 mt-7'>{msg}<Link to={'/'}>go to home</Link></p>}
           </form>
         </div>
       </section>
