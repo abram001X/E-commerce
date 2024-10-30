@@ -23,6 +23,29 @@ section{
 .profile{
   color: #fff;
 }
+.delete-products{
+  display: none;
+}
+.list-products:hover .delete-products{
+  display: block;
+}
+.profile-padre{
+  overflow-y: auto;
+  height: 90%;
+} 
+.profile-padre::-webkit-scrollbar {
+  width: 8px;     /* Tamaño del scroll en vertical */
+  height: 8px;   /* Ocultar scroll */
+}
+.profile-padre::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;   
+}
+.profile-padre::-webkit-scrollbar-track {
+  background: #000;
+  border-radius: 4px;
+}
+
 @keyframes load {
   0%{
     display: block;

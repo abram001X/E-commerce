@@ -25,13 +25,17 @@ export default function Product() {
     }
     if (!user || !user.cart) {
       const arrayProducts = [product.title];
-      myCart({ cart: JSON.stringify(arrayProducts) });
-      checkLogin();
+      const res = await myCart({ cart: JSON.stringify(arrayProducts) });
+      if (res) {
+        checkLogin();
+      }
       return;
     }
     const cartProducts = [...user.cart, product.title];
-    myCart({ cart: JSON.stringify(cartProducts) });
-    checkLogin();
+    const res = await myCart({ cart: JSON.stringify(cartProducts) });
+    if (res) {
+      checkLogin();
+    }
   };
 
   if (product.category)
