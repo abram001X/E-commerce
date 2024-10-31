@@ -31,6 +31,21 @@ export const addProducts = async (data) => {
     });
 };
 
+export const submitImages = async (images) => {
+  return axios
+    .post('/api/form-images', images,{
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+}
+
 export const myCart = async (data) => {
   return axios
     .post('/api/my-cart', data)

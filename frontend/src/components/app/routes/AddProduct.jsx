@@ -2,7 +2,7 @@ import { useContext, useRef, useState } from 'react';
 import { IconFileImage } from '../../Icons';
 import { AuthContext } from '../../../provider/authProvider';
 import { Link, Navigate } from 'react-router-dom';
-import { addProducts } from '../../../lib/api';
+import { addProducts, submitImages } from '../../../lib/api';
 
 export default function AddProduct() {
   const [img, setImg] = useState(null);
@@ -13,9 +13,9 @@ export default function AddProduct() {
   const [categoryId, setCategoryId] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [msg, setMsg] = useState(null)
+  const [msg, setMsg] = useState(null);
   const inputRef = useRef(null);
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState([]);
   const { isAuthenticated, isLoading } = useContext(AuthContext);
   const categoriesArray = [
     'Clothes',
@@ -34,23 +34,44 @@ export default function AddProduct() {
     setPrice(parseInt(price));
 
     if (!price) {
-      setErorrInput('Price invalid');
+      return setErorrInput('Price invalid');
     }
     if (title.length < 5) {
-      setErorrInput('Name invalid');
+      return setErorrInput('Name invalid');
     }
     if (description.length < 50) {
       return setErorrInput('The description must have at least 50 characters.');
     }
-    const product = {
+    const formData = new FormData();
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images', images[i]);
+    }
+    try {
+      const resImages = await submitImages(formData);
+      console.log(resImages)
+      if (resImages.data.response) {
+        const product = {
+          title,
+          categoryId,
+          price,
+          description,
+          img: JSON.stringify(resImages.data.response)
+        };
+        const res = await addProducts(product);
+        setMsg(res.data.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    /*const product = {
       title,
       categoryId,
       price,
       description,
       img: JSON.stringify(images)
-    };
-    const res = await addProducts(product);
-    setMsg(res.data.message)
+    };*/
+    /*const res = await addProducts(product);
+     */
   };
   const handleFile = (e) => {
     let isImg = true;
@@ -63,13 +84,12 @@ export default function AddProduct() {
         if (!e.target.files[j].type.includes('image')) {
           setErorrMsg('File invalid');
           isImg = false;
-          break
+          break;
         }
       }
       if (isImg) {
         setErorrMsg('');
-        const j = [...e.target.files]
-        setImages(j.map(obj=> URL.createObjectURL(obj)))
+        setImages(e.target.files);
         return setImg([...e.target.files]);
       }
     }
@@ -147,7 +167,7 @@ export default function AddProduct() {
             >
               {categoriesArray.map((name, j) => {
                 return (
-                  <option key={j} value={j+1}>
+                  <option key={j} value={j + 1}>
                     {name}
                   </option>
                 );
@@ -176,7 +196,17 @@ export default function AddProduct() {
               className="text-black resize-none h-32 outline-none p-1 focus:bg-gray-200 "
             />
             {errorInput && <h1 className="text-red-700">{errorInput}</h1>}
-           {!msg ?  <button className="bg-blue-500 mt-7">Post</button>: <p className='text-green-600 mt-7'>{msg}<Link to={'/'}>go to home</Link></p>}
+            {!msg ? (
+              <button className="bg-blue-500 mt-7">Post</button>
+            ) : (
+              <p className="mt-7 text-green-600">
+                {msg}
+                <Link to={'/'}>
+                  {' '}
+                  <p className="text-white">go to home</p>
+                </Link>
+              </p>
+            )}
           </form>
         </div>
       </section>

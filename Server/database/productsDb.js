@@ -39,7 +39,6 @@ class DbProducts {
       { title, categoryId, price, description, img },
       id
     ) {
-      console.log(img)
       try {
         userData = await db.execute({
           sql: 'INSERT INTO products(title, categoryId, price, description, images, id) VALUES (:title, :categoryId, :price, :description, :img, :id)',

@@ -2,6 +2,7 @@ import { SECRET_JWT_KEY } from '../config.js'
 import jwt from 'jsonwebtoken'
 import { User } from '../database/userDb.js'
 import { Products } from '../database/productsDb.js'
+import { saveImages } from '../middlewares/diskStorage.js'
 
 export const register = async (req, res) => {
   const data = req.body
@@ -139,4 +140,9 @@ export const getProducts = async (req, res) => {
     productsDb = await Products.getProductsByTitle(req.query.title)
   } else productsDb = await Products.getAllProducts()
   return res.send(productsDb)
+}
+
+export const images = async (req, res) => {
+  const response = await req.files.map(saveImages)
+  res.json({ response })
 }
