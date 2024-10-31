@@ -48,7 +48,6 @@ export default function AddProduct() {
     }
     try {
       const resImages = await submitImages(formData);
-      console.log(resImages)
       if (resImages.data.response) {
         const product = {
           title,
